@@ -1,3 +1,5 @@
 /venv/
 /dataset/
 /logs/
+
+*.ipynb
