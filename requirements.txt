@@ -1,3 +1,5 @@
 praw
 pandas
 selenium
+beautifulsoup4
+markdown

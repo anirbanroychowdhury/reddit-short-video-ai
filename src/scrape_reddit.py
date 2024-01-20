@@ -15,7 +15,9 @@ def init_reddit_client():
     return reddit_client
 
 
-def extract_top_posts(reddit_client: praw.Reddit , subreddit: str, limit: int, time_filter='day') -> pd.DataFrame:
+def extract_top_posts(
+    reddit_client: praw.Reddit, subreddit: str, limit: int, time_filter="day"
+) -> pd.DataFrame:
     # TODO: There are multiple problems with this fuction.
     # 1. If a post contains only link a pic, it will not have any body to get the text from. We need to make sure we disregards post which are only made of links and images. - Put a condition to check if selfText is null
     # 2. Praw returns us markdown text not string text. Therefore there are a lot of special charecters that we need to handle and sanitize. - ?????
@@ -72,7 +74,9 @@ def main():
     for subreddit_key, subreddit_extract_df in subreddit_extracts_list.items():
         path = f"./dataset/{current_date.strftime('%Y')}/{current_date.strftime('%m')}/{current_date.strftime('%d')}/{subreddit_key}/{subreddit_key}_{current_date.strftime('%Y-%m-%d')}_extract.csv"
         create_folder_dir(path)
-        subreddit_extract_df.to_csv(path, encoding="utf-8", sep=',', quoting=csv.QUOTE_NONNUMERIC, index=False)
+        subreddit_extract_df.to_csv(
+            path, encoding="utf-8", sep=",", quoting=csv.QUOTE_NONNUMERIC, index=False
+        )
 
 
 if __name__ == "__main__":
