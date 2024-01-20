@@ -12,5 +12,3 @@ The steps would be:
 
 
 
-client id - glClH8o6JFlouyk-kVFa6Q
-secret - wH4tzU6ikYc7Ci5gKHqb1q7Sce2K3g
