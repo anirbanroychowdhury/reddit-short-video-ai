@@ -10,7 +10,9 @@ import csv
 import sqlite3
 
 
-def init_reddit_client():
+def init_reddit_client(
+    CLIENT_ID: str, CLIENT_SECRET: str, USER_AGENT: str
+) -> praw.Reddit:
     reddit_client = praw.Reddit(
         client_id=CLIENT_ID, client_secret=CLIENT_SECRET, user_agent=USER_AGENT
     )
@@ -86,16 +88,3 @@ def main():
         )
         conn = sqlite3.connect("reddit.db")
         subreddit_extract_df.to_sql("top_posts", conn, if_exists="append")
-
-
-if __name__ == "__main__":
-    # Replace these with your own credentials
-    CLIENT_ID = "glClH8o6JFlouyk-kVFa6Q"
-    CLIENT_SECRET = "wH4tzU6ikYc7Ci5gKHqb1q7Sce2K3g"
-    USER_AGENT = "YOUR_USER_AGENT"
-    logging.basicConfig(
-        filename="./logs/app.log",
-        filemode="w",
-        format="%(name)s - %(levelname)s - %(message)s",
-    )
-    main()

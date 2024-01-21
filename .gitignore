@@ -1,4 +1,11 @@
+__pycache__/
+*.py[cod]
+*.pyc
+
 /venv/
 /dataset/
 
 *.ipynb
+*.db
+
+__pycache__
