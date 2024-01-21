@@ -1,3 +1,4 @@
+import uuid
 import pandas as pd
 from datetime import datetime
 import praw
@@ -6,6 +7,7 @@ from markdown import markdown
 import os
 import logging
 import csv
+import sqlite3
 
 
 def init_reddit_client():
@@ -21,6 +23,7 @@ def extract_top_posts(
     # TODO: There are multiple problems with this fuction.
     # 1. If a post contains only link a pic, it will not have any body to get the text from. We need to make sure we disregards post which are only made of links and images. - Put a condition to check if selfText is null
     # 2. Praw returns us markdown text not string text. Therefore there are a lot of special charecters that we need to handle and sanitize. - ?????
+    # 3. Extraction of the post from api and saving of data should be seperated.
     # BUG: Write now if you open the file generated as a csv it will have fucked up formatting. This needs to be taken care off.
     posts_data = []
     print(f"Extracting Posts\n")
@@ -31,13 +34,17 @@ def extract_top_posts(
 
     for post in top_posts:
         post_details = {
+            "id": str(uuid.uuid4()),
             "url": post.url,
             "title": post.title,
             "upvotes": post.score,
             "body_text": post.selftext,
+            "_created_at": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
+            "_last_updated_at": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
         }
         posts_data.append(post_details)
     posts_df = pd.DataFrame(posts_data)
+    posts_df.set_index("id", inplace=True)
     return posts_df
 
 
@@ -77,6 +84,8 @@ def main():
         subreddit_extract_df.to_csv(
             path, encoding="utf-8", sep=",", quoting=csv.QUOTE_NONNUMERIC, index=False
         )
+        conn = sqlite3.connect("reddit.db")
+        subreddit_extract_df.to_sql("top_posts", conn, if_exists="append")
 
 
 if __name__ == "__main__":
