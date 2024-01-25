@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clickable Items</title>
+    <style>
+        .item-box {
+            border: 2px solid black;
+            margin: 10px;
+            padding: 10px;
+            display: inline-block;
+        }
+        .item-box a {
+            text-decoration: none;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <h1>Clickable Routes</h1>
+    <div>
+        {% for route in routes %}
+            <div class="item-box">
+                <a href="{{ route }}">{{ route }}</a>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
