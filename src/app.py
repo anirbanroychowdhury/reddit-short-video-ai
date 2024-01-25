@@ -1,25 +1,12 @@
-from flask import Flask, render_template
-from src.api.scrape_reddit import (
-    init_reddit_client,
-    extract_top_posts,
-    tranform_posts,
-    create_folder_dir,
-)
-from datetime import datetime
-import csv
-import sqlite3
-import json
+from flask import render_template
 from dotenv import load_dotenv
-import os
+from src.config import app
+
 from src.blueprints.extract_blueprint import extract_blueprint
+
 
 load_dotenv()
 
-app = Flask(__name__)
-
-app.config["CLIENT_ID"] = os.environ.get("CLIENT_ID")
-app.config["CLIENT_SECRET"] = os.environ.get("CLIENT_SECRET")
-app.config["USER_AGENT"] = os.environ.get("USER_AGENT")
 
 app.register_blueprint(extract_blueprint)
 
@@ -30,3 +17,7 @@ def hello_world():
     for i in app.url_map.iter_rules():
         routes.append(i)
     return render_template("index.html", routes=routes)
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=8000, debug=True)

@@ -1,5 +1,5 @@
 from flask import Blueprint
-from src.api.scrape_reddit import (
+from src.scripts.scrape_reddit import (
     init_reddit_client,
     extract_top_posts,
     tranform_posts,
@@ -10,6 +10,8 @@ from datetime import datetime
 import csv
 import sqlite3
 import json
+from src.models import TopPosts
+from src.config import db
 
 extract_blueprint = Blueprint("extract_blueprint", __name__)
 
@@ -40,7 +42,6 @@ def extract_top_post_from_subreddit():
         subreddit_extract_df.to_csv(
             path, encoding="utf-8", sep=",", quoting=csv.QUOTE_NONNUMERIC, index=False
         )
-        conn = sqlite3.connect("reddit.db")
-        subreddit_extract_df.to_sql("top_posts", conn, if_exists="append")
+        subreddit_extract_df.to_sql("top_posts", db.engine, if_exists="append")
 
     return json.dumps({"success": True}), 200, {"ContentType": "application/json"}
