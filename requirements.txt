@@ -4,3 +4,7 @@ selenium
 beautifulsoup4
 markdown
 flask
+python-dotenv
+Flask-SQLAlchemy
+# connexion
+# flask-marshmallow
