@@ -4,7 +4,6 @@ from src.scripts.scrape_reddit import (
     tranform_posts,
     create_folder_dir,
 )
-import os
 from datetime import datetime
 import csv
 import json
@@ -16,10 +15,8 @@ extract_blueprint = Blueprint("extract_blueprint", __name__)
 
 
 @extract_blueprint.route("/extract")
-@swag_from("extract_post.yml")
+@swag_from("specs/extract_post.yml")
 def extract_top_post_from_subreddit():
-    # INPUTS
-
     subreddits = ["nosleep", "amitheasshole"]
     time_filter = "day"
 

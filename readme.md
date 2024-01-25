@@ -14,3 +14,12 @@ The steps would be:
 Adding a flask backend for easier access???
 
 
+Added swagger for easier api doc and validation
+Added blueprints for easier path managemet
+Added config to seperate out app run and config
+Added SQL Alchemy ORM
+
+# TODO:
+
+1. Create an api layer to interact with the db.
+2. Create the api to get screenshot using selenium

@@ -1,5 +1,4 @@
 from flask import render_template
-from dotenv import load_dotenv
 from src.config import app
 
 from src.blueprints.extract_blueprint import extract_blueprint

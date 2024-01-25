@@ -8,25 +8,24 @@ from flasgger import Swagger
 
 from src.scripts.scrape_reddit import init_reddit_client
 
+# Load env variables
 load_dotenv()
 
 basedir = pathlib.Path(__file__).parent.resolve()
 
-
+# init flask and swagger app
 app = Flask(__name__)
 swagger = Swagger(app)
 
-app.config["CLIENT_ID"] = os.environ.get("CLIENT_ID")
-app.config["CLIENT_SECRET"] = os.environ.get("CLIENT_SECRET")
-app.config["USER_AGENT"] = os.environ.get("USER_AGENT")
-
+# Init Database
 app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{basedir / 'reddit.db'}"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-print(f"TEST:{app.config["CLIENT_ID"]}")
+
 db = SQLAlchemy(app)
 
+# Init reddit client
 reddit_client = init_reddit_client(
-    app.config["CLIENT_ID"],
-    app.config["CLIENT_SECRET"],
-    app.config["USER_AGENT"],
+    os.environ.get("CLIENT_ID"),
+    os.environ.get("CLIENT_SECRET"),
+    os.environ.get("USER_AGENT"),
 )
