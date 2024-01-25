@@ -6,6 +6,6 @@ markdown
 flask
 python-dotenv
 Flask-SQLAlchemy
-connexion
 # flask-marshmallow
-connexion[flask,swagger-ui,uvicorn]
+# connexion[flask,swagger-ui,uvicorn]
+flasgger==0.9.7b2

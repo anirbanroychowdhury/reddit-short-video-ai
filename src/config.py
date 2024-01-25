@@ -1,27 +1,32 @@
-# config.py
-
 import pathlib
 import os
+from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
+
 from flask import Flask
-import logging
-import connexion
+from flasgger import Swagger
+
+from src.scripts.scrape_reddit import init_reddit_client
+
+load_dotenv()
 
 basedir = pathlib.Path(__file__).parent.resolve()
 
 
-# app = Flask(__name__)
-app = connexion.FlaskApp(__name__, specification_dir="./")
-app.add_api(".\swagger.yml")
+app = Flask(__name__)
+swagger = Swagger(app)
 
-flask_app = app.app
+app.config["CLIENT_ID"] = os.environ.get("CLIENT_ID")
+app.config["CLIENT_SECRET"] = os.environ.get("CLIENT_SECRET")
+app.config["USER_AGENT"] = os.environ.get("USER_AGENT")
 
+app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{basedir / 'reddit.db'}"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+print(f"TEST:{app.config["CLIENT_ID"]}")
+db = SQLAlchemy(app)
 
-flask_app.config["CLIENT_ID"] = os.environ.get("CLIENT_ID")
-flask_app.config["CLIENT_SECRET"] = os.environ.get("CLIENT_SECRET")
-flask_app.config["USER_AGENT"] = os.environ.get("USER_AGENT")
-
-flask_app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{basedir / 'reddit.db'}"
-flask_app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-
-db = SQLAlchemy(flask_app)
+reddit_client = init_reddit_client(
+    app.config["CLIENT_ID"],
+    app.config["CLIENT_SECRET"],
+    app.config["USER_AGENT"],
+)

@@ -1,20 +1,19 @@
 from flask import render_template
 from dotenv import load_dotenv
-from src.config import flask_app, app
+from src.config import app
 
 from src.blueprints.extract_blueprint import extract_blueprint
+from src.blueprints.database import database_blueprint
 
 
-load_dotenv()
+app.register_blueprint(extract_blueprint)
+app.register_blueprint(database_blueprint)
 
 
-flask_app.register_blueprint(extract_blueprint)
-
-
-@flask_app.route("/")
+@app.route("/")
 def hello_world():
     routes = []
-    for i in flask_app.url_map.iter_rules():
+    for i in app.url_map.iter_rules():
         routes.append(i)
     return render_template("index.html", routes=routes)
 

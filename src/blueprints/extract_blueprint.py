@@ -1,6 +1,5 @@
 from flask import Blueprint
 from src.scripts.scrape_reddit import (
-    init_reddit_client,
     extract_top_posts,
     tranform_posts,
     create_folder_dir,
@@ -8,22 +7,19 @@ from src.scripts.scrape_reddit import (
 import os
 from datetime import datetime
 import csv
-import sqlite3
 import json
-from src.models import TopPosts
-from src.config import db
+from src.config import db, reddit_client
+from flasgger import swag_from
+
 
 extract_blueprint = Blueprint("extract_blueprint", __name__)
 
 
 @extract_blueprint.route("/extract")
+@swag_from("extract_post.yml")
 def extract_top_post_from_subreddit():
     # INPUTS
-    reddit_client = init_reddit_client(
-        os.environ.get("CLIENT_ID"),
-        os.environ.get("CLIENT_SECRET"),
-        os.environ.get("USER_AGENT"),
-    )
+
     subreddits = ["nosleep", "amitheasshole"]
     time_filter = "day"
 
