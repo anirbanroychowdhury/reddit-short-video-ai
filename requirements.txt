@@ -6,5 +6,6 @@ markdown
 flask
 python-dotenv
 Flask-SQLAlchemy
-# connexion
+connexion
 # flask-marshmallow
+connexion[flask,swagger-ui,uvicorn]
