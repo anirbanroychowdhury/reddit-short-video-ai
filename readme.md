@@ -3,6 +3,8 @@
 The main aim of this project is to create an automated short video creation pipeline. Currently short form video platforms are overrun with generic reddit post being narrated with brain dead backgroud video and music playing. The creation of such a
 video can be completely automated.
 
+RUN COMMAND: flask --app src.app --debug run
+
 The steps would be:
 1. Get the top X number of posts form story subreddit such as r/nosleep or r/aita. 
 2. Also get an image of the entire post as that will be overlayed on top of the background video - selenium script????
@@ -21,5 +23,5 @@ Added SQL Alchemy ORM
 
 # TODO:
 
-1. Create an api layer to interact with the db.
+1. Create an api layer to interact with the db. - insert a record, insert a dataframe?
 2. Create the api to get screenshot using selenium
