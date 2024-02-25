@@ -1,28 +1,30 @@
-from flask import Blueprint
-from src.scripts.scrape_reddit import (
+import json
+from src.reddit import bp
+from src.reddit.scrape_reddit import (
     extract_top_posts,
     tranform_posts,
     create_folder_dir,
 )
 from datetime import datetime
+from flask import current_app
 import csv
-import json
-from src.config import db, reddit_client
-from flasgger import swag_from
+from src.extensions import db
+
+from src.extensions import reddit_client
 
 
-extract_blueprint = Blueprint("extract_blueprint", __name__)
-
-
-@extract_blueprint.route("/extract")
-@swag_from("specs/extract_post.yml")
+@bp.route("/")
 def extract_top_post_from_subreddit():
+    # return "HELLO"
     subreddits = ["nosleep", "amitheasshole"]
     time_filter = "day"
 
     subreddit_extracts_list = {}
+    print(reddit_client)
     for subreddit in subreddits:
-        scraped_post_df = extract_top_posts(reddit_client, subreddit, 2, time_filter)
+        scraped_post_df = extract_top_posts(
+            current_app.reddit_client, subreddit, 2, time_filter
+        )
         scraped_post_df = tranform_posts(scraped_post_df)
         subreddit_extracts_list[subreddit] = scraped_post_df
 
@@ -35,6 +37,6 @@ def extract_top_post_from_subreddit():
         subreddit_extract_df.to_csv(
             path, encoding="utf-8", sep=",", quoting=csv.QUOTE_NONNUMERIC, index=False
         )
-        subreddit_extract_df.to_sql("top_posts", db.engine, if_exists="append")
+        subreddit_extract_df.to_sql("posts", db.engine, if_exists="append")
 
     return json.dumps({"success": True}), 200, {"ContentType": "application/json"}
